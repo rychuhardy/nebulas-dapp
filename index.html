@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+    <meta charset="utf-8">
+    <title>Expensivo - manage your expenses</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="nebPay.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            // Your code to run since DOM is loaded and ready
+            'use strict';
+    
+            var NebPay = require('nebpay');
+            var nebPay = new NebPay();
+    
+            if(webExtensionWallet === undefined) {
+                alert('Web Extension Wallet is not installed. Install it from https://chrome.google.com/webstore/detail/nasextwallet/gehjkhmhclgnkkhpfamakecfgakkfkco')
+            }
+    
+            function addExpense() {
+                var tile = document.getElementById('title').value;
+                var date = document.getElementById('date').value;
+                var amount = document.getElementById('amount').value;
+                var category = document.getElementById('category').value;
+                var notes = document.getElementById('notes').value;
+
+                
+            }
+    
+        });    
+        </script>
+</html>
+<body>
+    <form>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Expense title</label>
+            <input type="text" class="form-control" id="title" placeholder="title">
+          </div>  
+          <div class="form-group col-md-6">
+            <label for="date">Expense date</label>
+            <input type="date" class="form-control" id="date" placeholder="date">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Expense amount</label>
+            <input type="number" class="form-control" id="amount" placeholder="amount">
+          </div>  
+          <div class="form-group col-md-6">
+            <label for="date">Expense category</label>
+            <input type="text" class="form-control" id="category" placeholder="category">
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Expense notes</label>
+            <textarea class="form-control" id="notes" rows="3" placeholder="notes"></textarea>
+        </div>
+
+        <button type="button" onclick="addExpense()" class="btn btn-primary">Add expense</button>
+      </form>
+</body>
