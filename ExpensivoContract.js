@@ -2,7 +2,7 @@
 
 var ExpensivoContract = function () {
 
-    LocalConnectionStorage.defineMapProperty(this, 'expensesMap');
+    LocalContractStorage.defineMapProperty(this, 'expensesMap');
 
 };
 
