@@ -5,12 +5,13 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script src="nebPay.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-            // Your code to run since DOM is loaded and ready
+        // document.addEventListener("DOMContentLoaded", function(event) {
+        //     // Your code to run since DOM is loaded and ready
             'use strict';
     
             var NebPay = require('nebpay');
             var nebPay = new NebPay();
+            var contractAddress = 'n1sMi2rs6aU1KnxohxNzRGdXRso4dcxUETe';
     
             if(webExtensionWallet === undefined) {
                 alert('Web Extension Wallet is not installed. Install it from https://chrome.google.com/webstore/detail/nasextwallet/gehjkhmhclgnkkhpfamakecfgakkfkco')
@@ -18,15 +19,26 @@
     
             function addExpense() {
                 var tile = document.getElementById('title').value;
-                var date = document.getElementById('date').value;
-                var amount = document.getElementById('amount').value;
+                var date = Date.parse(document.getElementById('date').value);
+                var amount = parseInt(document.getElementById('amount').value);
                 var category = document.getElementById('category').value;
                 var notes = document.getElementById('notes').value;
 
+                nebPay.call(contractAddress, 0, 'addExpense', JSON.stringify([date, amount, notes, tile, category]), {
+                    listener: onExpenseAdded
+                });
+
+            }
+
+            function onExpenseAdded(response) {
+                if(typeof(response) === 'string' && response.startsWith('Error')) {
+                    throw new Error(response);
+                }
                 
+                alert('Expense added: transaction hash: ' + response.txhash);
             }
     
-        });    
+        // });    
         </script>
 </html>
 <body>
@@ -58,6 +70,6 @@
             <textarea class="form-control" id="notes" rows="3" placeholder="notes"></textarea>
         </div>
 
-        <button type="button" onclick="addExpense()" class="btn btn-primary">Add expense</button>
+        <button type="button" onclick="addExpense" class="btn btn-primary">Add expense</button>
       </form>
 </body>
