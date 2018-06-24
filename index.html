@@ -60,6 +60,18 @@
         if (typeof (response) === 'string' && response.startsWith('Error')) {
             throw new Error(response);
         }
+        
+        var table = $('#tableBody');
+        var tableRows = "";
+        var data = JSON.parse(response.result);
+        for(var i =0; i < data.length; i++) {
+            var item = data[i];
+            var dateFormatted = new Date(1970, 0, 1);
+            dateFormatted.setMilliseconds(item.date);
+            tableRows += `<tr><th scope="row">${i+1}</th><td>${item.title}</td><td>${item.amount}</td><td>${item.category}</td><td>${dateFormatted.toLocaleDateString()}</td><td>${item.notes}</td></tr>`;
+        }
+
+        table.html(tableRows);
     }
     $(document).ready(function(event) {
         //$('#addButton').click();
@@ -117,8 +129,25 @@
             </div>
 
             <div id="view" class="tab-pane fade" role="tabpanel" aria-labelledby="viewButton">
-                <h3>Menu 1</h3>
-                <p>Some content in menu 1.</p>
+                    <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Notes</th>
+                              </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                              <!-- <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+
+                              </tr> -->
+                            </tbody>
+                          </table>
             </div>
 
         </div>
