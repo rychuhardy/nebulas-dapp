@@ -49,8 +49,21 @@
 
         alert('Expense added: transaction hash: ' + response.txhash);
     }
+
+    function showAllExpenses() {
+        nebPay.simulateCall(contractAddress, 0, 'getAllExpenses', "[]", {
+            listener: onShowAllExpenses
+        });
+    }
+
+    function onShowAllExpenses(response) {
+        if (typeof (response) === 'string' && response.startsWith('Error')) {
+            throw new Error(response);
+        }
+    }
     $(document).ready(function(event) {
         //$('#addButton').click();
+        $('#viewButton').click(showAllExpenses);
     });
 
         // });    
