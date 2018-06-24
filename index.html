@@ -1,75 +1,105 @@
 <!DOCTYPE HTML>
 <html>
-    <meta charset="utf-8">
-    <title>Expensivo - manage your expenses</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script src="nebPay.js"></script>
-    <script>
-        // document.addEventListener("DOMContentLoaded", function(event) {
-        //     // Your code to run since DOM is loaded and ready
-            'use strict';
-    
-            var NebPay = require('nebpay');
-            var nebPay = new NebPay();
-            var contractAddress = 'n1sMi2rs6aU1KnxohxNzRGdXRso4dcxUETe';
-    
-            if(webExtensionWallet === undefined) {
-                alert('Web Extension Wallet is not installed. Install it from https://chrome.google.com/webstore/detail/nasextwallet/gehjkhmhclgnkkhpfamakecfgakkfkco')
-            }
-    
-            function addExpense() {
-                var tile = document.getElementById('title').value;
-                var date = Date.parse(document.getElementById('date').value);
-                var amount = parseInt(document.getElementById('amount').value);
-                var category = document.getElementById('category').value;
-                var notes = document.getElementById('notes').value;
+<meta charset="utf-8">
+<title>Expensivo - manage your expenses</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+    crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src="nebPay.js"></script>
+<script>
+    // document.addEventListener("DOMContentLoaded", function(event) {
+    //     // Your code to run since DOM is loaded and ready
+    'use strict';
 
-                nebPay.call(contractAddress, 0, 'addExpense', JSON.stringify([date, amount, notes, tile, category]), {
-                    listener: onExpenseAdded
-                });
+    var NebPay = require('nebpay');
+    var nebPay = new NebPay();
+    var contractAddress = 'n1sMi2rs6aU1KnxohxNzRGdXRso4dcxUETe';
 
-            }
+    if (webExtensionWallet === undefined) {
+        alert('Web Extension Wallet is not installed. Install it from https://chrome.google.com/webstore/detail/nasextwallet/gehjkhmhclgnkkhpfamakecfgakkfkco')
+    }
 
-            function onExpenseAdded(response) {
-                if(typeof(response) === 'string' && response.startsWith('Error')) {
-                    throw new Error(response);
-                }
-                
-                alert('Expense added: transaction hash: ' + response.txhash);
-            }
-    
+    function addExpense() {
+        var tile = document.getElementById('title').value;
+        var date = Date.parse(document.getElementById('date').value);
+        var amount = parseInt(document.getElementById('amount').value);
+        var category = document.getElementById('category').value;
+        var notes = document.getElementById('notes').value;
+
+        nebPay.call(contractAddress, 0, 'addExpense', JSON.stringify([date, amount, notes, tile, category]), {
+            listener: onExpenseAdded
+        });
+
+    }
+
+    function onExpenseAdded(response) {
+        if (typeof (response) === 'string' && response.startsWith('Error')) {
+            throw new Error(response);
+        }
+
+        alert('Expense added: transaction hash: ' + response.txhash);
+    }
+    $(document).ready(function(event) {
+        $('#addButton').click();
+    });
+
         // });    
-        </script>
+</script>
+
 </html>
+
 <body>
-    <form>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputPassword4">Expense title</label>
-            <input type="text" class="form-control" id="title" placeholder="title">
-          </div>  
-          <div class="form-group col-md-6">
-            <label for="date">Expense date</label>
-            <input type="date" class="form-control" id="date" placeholder="date">
-          </div>
-        </div>
+    <div class="container">
+        <ul class="nav nav-pills">
+            <li class="active">
+                <a data-toggle="pill" href="#add" id="addButton">Add Expense</a>
+            </li>
+            <li>
+                <a data-toggle="pill" href="#view">View your expenses</a>
+            </li>
 
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputPassword4">Expense amount</label>
-            <input type="number" class="form-control" id="amount" placeholder="amount">
-          </div>  
-          <div class="form-group col-md-6">
-            <label for="date">Expense category</label>
-            <input type="text" class="form-control" id="category" placeholder="category">
-          </div>
-        </div>
+        </ul>
+        <div class="tab-content">
+            <div id="add" class="tab-pane fade in active">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Expense title</label>
+                            <input type="text" class="form-control" id="title" placeholder="title">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="date">Expense date</label>
+                            <input type="date" class="form-control" id="date" value="2018-01-08">
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Expense notes</label>
-            <textarea class="form-control" id="notes" rows="3" placeholder="notes"></textarea>
-        </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Expense amount</label>
+                            <input type="number" class="form-control" id="amount" placeholder="amount">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="date">Expense category</label>
+                            <input type="text" class="form-control" id="category" placeholder="category">
+                        </div>
+                    </div>
 
-        <button type="button" onclick="addExpense" class="btn btn-primary">Add expense</button>
-      </form>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Expense notes</label>
+                        <textarea class="form-control" id="notes" rows="3" placeholder="notes"></textarea>
+                    </div>
+
+                    <button type="button" onclick="addExpense()" class="btn btn-primary">Add expense</button>
+                </form>
+            </div>
+
+            <div id="view" class="tab-pane fade">
+                <h3>Menu 1</h3>
+                <p>Some content in menu 1.</p>
+            </div>
+
+        </div>
+    </div>
 </body>
